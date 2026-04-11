@@ -6,16 +6,42 @@ I created this project to improve my own (and hopefully others) workflows and PR
 
 ## Usage
 
-API Endpoint:
+### API Endpoint:
 
 ```text
-https://hydra-banner.harinn.dev/build/<hydra-build-id>
+https://hydra-banner.harinn.dev/build/<build-id>
 ```
 
 Embed in a PR or issue:
 
 ```text
-![](https://hydra-banner.harinn.dev/build/<hydra-build-id>)
+# Not clickable
+![](https://hydra-banner.harinn.dev/build/<build-id>) 
+
+# Click to nav to Hydra
+[![](https://hydra-banner.harinn.dev/build/<build-id>)](https://hydra.nixos.org/build/<build-id>) 
+```
+
+### Generate markdown for Hydra build(s):
+
+```bash
+nix run github:MiniHarinn/hydra-banner#getmd -- <build-id|url> [build-id|url]...
+```
+
+Examples:
+
+```bash
+nix run github:MiniHarinn/hydra-banner#getmd -- <build-id>
+nix run github:MiniHarinn/hydra-banner#getmd -- https://hydra.nixos.org/build/<build-id>
+nix run github:MiniHarinn/hydra-banner#getmd -- <build-id-1> <build-id-2> <build-id-3>
+```
+
+Output (ready to paste into a PR or issue):
+
+```text
+[![](https://hydra-banner.harinn.dev/build/<build-id-1>)](https://hydra.nixos.org/build/<build-id-1>)
+[![](https://hydra-banner.harinn.dev/build/<build-id-2>)](https://hydra.nixos.org/build/<build-id-2>)
+[![](https://hydra-banner.harinn.dev/build/<build-id-3>)](https://hydra.nixos.org/build/<build-id-3>)
 ```
 
 ## Example Output
