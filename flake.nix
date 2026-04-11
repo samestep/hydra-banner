@@ -11,6 +11,14 @@
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+      getmd = system:
+        let pkgs = import nixpkgs { inherit system; };
+        in pkgs.stdenvNoCC.mkDerivation {
+          name = "getmd";
+          src = ./scripts/getmd;
+          dontUnpack = true;
+          installPhase = "install -D $src $out/bin/getmd";
+        };
     in {
       packages = forAllSystems (system:
         let
@@ -25,6 +33,7 @@
           };
         in {
           default = rustPackage;
+          getmd = getmd system;
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/miniharinn/hydra-banner";
             tag = "latest";
@@ -39,6 +48,10 @@
           };
         }
       );
+
+      apps = forAllSystems (system: {
+        getmd = { type = "app"; program = "${getmd system}/bin/getmd"; };
+      });
 
       devShells = forAllSystems (system:
         let

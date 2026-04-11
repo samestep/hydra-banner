@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: getmd <build-id|url> [build-id|url]..." >&2
+  exit 1
+fi
+
+for INPUT in "$@"; do
+  if [[ "$INPUT" =~ hydra\.nixos\.org/build/([0-9]+) ]]; then
+    BUILD_ID="${BASH_REMATCH[1]}"
+  else
+    BUILD_ID="$INPUT"
+  fi
+  echo "[![](https://hydra-banner.harinn.dev/build/${BUILD_ID})](https://hydra.nixos.org/build/${BUILD_ID})"
+done
