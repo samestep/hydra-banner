@@ -48,8 +48,14 @@
           };
         in {
           default = pkgs.mkShell {
-            nativeBuildInputs = [ toolchain ];
+            nativeBuildInputs = [
+              toolchain
+              pkgs.watchexec
+            ];
             RUST_LOG = "hydra_banner=debug,tower_http=debug";
+            shellHook = ''
+              echo "dev server: ./scripts/dev"
+            '';
           };
         }
       );
