@@ -17,12 +17,25 @@
           pkgs = import nixpkgs { inherit system; overlays = [ rust-overlay.overlays.default ]; };
           toolchain = pkgs.rust-bin.stable.latest.default;
           rustPlatform = pkgs.makeRustPlatform { cargo = toolchain; rustc = toolchain; };
-        in {
-          default = rustPlatform.buildRustPackage {
+          rustPackage = rustPlatform.buildRustPackage {
             pname = "hydra-banner";
             version = "0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
+          };
+        in {
+          default = rustPackage;
+          docker = pkgs.dockerTools.buildImage {
+            name = "ghcr.io/miniharinn/hydra-banner";
+            tag = "latest";
+            copyToRoot = [ rustPackage ];
+            config = {
+              Cmd = [ "${rustPackage}/bin/hydra-banner" ];
+              Env = [ "PORT=3000" ];
+              ExposedPorts = {
+                "3000/tcp" = { };
+              };
+            };
           };
         }
       );
