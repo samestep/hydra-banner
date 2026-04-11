@@ -5,13 +5,9 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    naersk = {
-      url = "github:nix-community/naersk";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, naersk }:
+  outputs = { self, nixpkgs, rust-overlay }:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
@@ -20,9 +16,14 @@
         let
           pkgs = import nixpkgs { inherit system; overlays = [ rust-overlay.overlays.default ]; };
           toolchain = pkgs.rust-bin.stable.latest.default;
-          naersk-lib = naersk.lib.${system}.override { cargo = toolchain; rustc = toolchain; };
+          rustPlatform = pkgs.makeRustPlatform { cargo = toolchain; rustc = toolchain; };
         in {
-          default = naersk-lib.buildPackage { src = ./.; };
+          default = rustPlatform.buildRustPackage {
+            pname = "hydra-banner";
+            version = "0";
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+          };
         }
       );
 
