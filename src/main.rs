@@ -16,6 +16,27 @@ pub struct AppState {
     pub client: Client,
 }
 
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+    #[cfg(unix)]
+    let terminate = async {
+        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+            .expect("failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
+}
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -27,11 +48,13 @@ async fn main() {
 
     let client = Client::builder()
         .user_agent("hydra-banner/0.1.0")
+        .timeout(std::time::Duration::from_secs(30))
         .build()
         .expect("reqwest client should initialize");
 
     let state = Arc::new(AppState { client });
     let app = Router::new()
+        .route("/health", get(handlers::health))
         .route("/job/:id", get(handlers::job_banner))
         .with_state(state)
         .layer(TraceLayer::new_for_http());
@@ -49,6 +72,7 @@ async fn main() {
         .expect("tcp listener should bind");
 
     axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
         .await
         .expect("axum server should run");
 }
