@@ -54,6 +54,7 @@ async fn main() {
 
     let state = Arc::new(AppState { client });
     let app = Router::new()
+        .route("/", get(handlers::home))
         .route("/health", get(handlers::health))
         .route("/build/:id", get(handlers::build_banner))
         .with_state(state)

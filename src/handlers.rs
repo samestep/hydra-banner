@@ -3,7 +3,7 @@ use std::sync::Arc;
 use axum::{
     extract::{Path, State},
     http::{header, StatusCode},
-    response::{IntoResponse, Response},
+    response::{IntoResponse, Redirect, Response},
 };
 use tracing::error;
 
@@ -15,6 +15,10 @@ use crate::{
 
 pub async fn health() -> StatusCode {
     StatusCode::OK
+}
+
+pub async fn home() -> Redirect {
+    Redirect::permanent("https://github.com/MiniHarinn/hydra-banner")
 }
 
 pub async fn build_banner(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> Response {
