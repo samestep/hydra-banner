@@ -41,40 +41,47 @@ text {
 </style>
 <rect x="10" y="10" width="1840" height="310" rx="10" class="frame-shadow"/>
 <rect x="10" y="10" width="1840" height="310" rx="10" class="frame"/>
-<line x1="1216" y1="44" x2="1216" y2="286" class="separator-shadow"/>
-<line x1="1216" y1="44" x2="1216" y2="286" class="separator"/>
-<line x1="1600" y1="44" x2="1600" y2="286" class="separator-shadow"/>
-<line x1="1600" y1="44" x2="1600" y2="286" class="separator"/>
-<g transform="translate(34,82)">
+<line x1="1470" y1="44" x2="1470" y2="286" class="separator-shadow"/>
+<line x1="1470" y1="44" x2="1470" y2="286" class="separator"/>
+<g id="left-rail" transform="translate(38,52)">
   {{ icon|safe }}
-  <text x="76" y="212" text-anchor="middle" class="build-id">#{{ id }}</text>
+  <text x="86" y="224" text-anchor="middle" class="build-id">#{{ id }}</text>
 </g>
-<g transform="translate(214,58)">
-  <text x="0" y="0" style="font-size:{{ headline_size }}px;font-weight:700">{{ job }}</text>
-  <text x="0" y="46" style="font-size:36px;font-weight:700;fill:{{ color }}">{{ status_label }}</text>
-  <text x="0" y="104" class="meta-label muted">Project / Jobset</text>
-  <text x="0" y="148" class="meta-value">{{ project }} / {{ jobset }}</text>
-  <text x="400" y="104" class="meta-label muted">System</text>
-  <text x="400" y="148" class="meta-value">{{ system }}</text>
-  <text x="680" y="104" class="meta-label muted">Evaluation</text>
-  <text x="680" y="148" class="meta-value">{{ evaluation }}</text>
-  <text x="0" y="190" class="label muted">Hydra Banner Info</text>
-  <text x="0" y="228" class="mono">Generated with hydra-banner.harinn.dev @ {{ generated_at }}</text>
+<g id="main-content" transform="translate(238,58)">
+  <g id="headline-block" transform="translate(0,10)">
+    <text x="0" y="0" style="font-size:{{ headline_size }}px;font-weight:700">{{ job }}</text>
+    <text x="0" y="46" style="font-size:36px;font-weight:700;fill:{{ color }}">{{ status_label }}</text>
+  </g>
+  <g id="primary-meta-row" transform="translate(0,114)">
+    <g id="project-jobset">
+      <text x="0" y="0" class="meta-label muted">Project / Jobset</text>
+      <text x="0" y="44" class="meta-value">{{ project }} / {{ jobset }}</text>
+    </g>
+    <g id="system-meta" transform="translate(430,0)">
+      <text x="0" y="0" class="meta-label muted">System</text>
+      <text x="0" y="44" class="meta-value">{{ system }}</text>
+    </g>
+    <g id="evaluation-meta" transform="translate(860,0)">
+      <text x="0" y="0" class="meta-label muted">Evaluation</text>
+      <text x="0" y="44" class="meta-value">{{ evaluation }}</text>
+    </g>
+  </g>
+  <g id="footer-meta" transform="translate(0,215)">
+    <text x="0" y="0" class="mono">Generated with hydra-banner.harinn.dev @ {{ generated_at }} (Per-Request)</text>
+  </g>
 </g>
-<g transform="translate(1246,64)">
-  <text x="0" y="0" class="label muted">Queued At</text>
-  <text x="0" y="34" class="value">{{ queued_at }}</text>
-  <text x="0" y="90" class="label muted">Started</text>
-  <text x="0" y="124" class="value">{{ started }}</text>
-  <text x="0" y="180" class="label muted">Finished</text>
-  <text x="0" y="214" class="value">{{ finished }}</text>
-</g>
-<g transform="translate(1628,64)">
-  <text x="0" y="0" class="label muted">Duration</text>
-  <text x="0" y="34" class="value">{{ duration }}</text>
-  <text x="0" y="90" class="label muted">Product</text>
-  <text x="0" y="124" class="value">{{ product }}</text>
-  <text x="0" y="180" class="label muted">Size</text>
-  <text x="0" y="214" class="value">{{ size }}</text>
+<g id="timing-column" transform="translate(1500,64)">
+  <g id="queued-at">
+    <text x="0" y="0" class="label muted">Queued At</text>
+    <text x="0" y="34" class="value">{{ queued_at }}</text>
+  </g>
+  <g id="started-at" transform="translate(0,90)">
+    <text x="0" y="0" class="label muted">Started</text>
+    <text x="0" y="34" class="value">{{ started }}</text>
+  </g>
+  <g id="finished-at" transform="translate(0,180)">
+    <text x="0" y="0" class="label muted">Finished</text>
+    <text x="0" y="34" class="value">{{ finished }}</text>
+  </g>
 </g>
 </svg>

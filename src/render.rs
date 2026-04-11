@@ -106,8 +106,8 @@ pub fn render_error_svg(message: &str) -> ErrorBannerTemplate {
 }
 
 pub fn headline_font_size(s: &str) -> u32 {
-    let ideal = 1020.0 / (s.len() as f64 * 0.52);
-    (ideal.floor() as u32).clamp(18, 44)
+    let ideal = 1140.0 / (s.len() as f64 * 0.50);
+    (ideal.floor() as u32).clamp(20, 46)
 }
 
 pub fn best_product(products: &HashMap<String, BuildProduct>) -> (String, String) {
