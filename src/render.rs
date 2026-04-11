@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use askama::Template;
 
@@ -29,6 +30,7 @@ pub struct BannerTemplate {
     pub queued_at: String,
     pub product: String,
     pub size: String,
+    pub generated_at: String,
 }
 
 #[derive(Template)]
@@ -63,6 +65,11 @@ pub fn render_svg(build: &HydraBuild) -> BannerTemplate {
         _ => "—".to_string(),
     };
     let queued_at = format_timestamp(build.timestamp);
+    let generated_at = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .ok()
+        .map(|duration| format_timestamp(duration.as_secs() as i64))
+        .unwrap_or_else(|| "—".to_string());
     let (product, size) = build
         .buildproducts
         .as_ref()
@@ -88,6 +95,7 @@ pub fn render_svg(build: &HydraBuild) -> BannerTemplate {
         queued_at,
         product,
         size,
+        generated_at,
     }
 }
 
@@ -98,8 +106,8 @@ pub fn render_error_svg(message: &str) -> ErrorBannerTemplate {
 }
 
 pub fn headline_font_size(s: &str) -> u32 {
-    let ideal = 880.0 / (s.len() as f64 * 0.55);
-    (ideal.floor() as u32).clamp(14, 38)
+    let ideal = 1020.0 / (s.len() as f64 * 0.52);
+    (ideal.floor() as u32).clamp(18, 44)
 }
 
 pub fn best_product(products: &HashMap<String, BuildProduct>) -> (String, String) {

@@ -55,7 +55,7 @@ async fn main() {
     let state = Arc::new(AppState { client });
     let app = Router::new()
         .route("/health", get(handlers::health))
-        .route("/job/:id", get(handlers::job_banner))
+        .route("/build/:id", get(handlers::build_banner))
         .with_state(state)
         .layer(TraceLayer::new_for_http());
 

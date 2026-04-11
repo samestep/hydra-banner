@@ -17,7 +17,7 @@ pub async fn health() -> StatusCode {
     StatusCode::OK
 }
 
-pub async fn job_banner(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> Response {
+pub async fn build_banner(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> Response {
     match fetch_build(&state.client, id).await {
         Ok(build) => (
             [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],

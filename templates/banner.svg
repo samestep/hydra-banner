@@ -1,49 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="300" viewBox="0 0 1800 300" role="img" aria-label="Hydra build #{{ id }} banner">
+<svg xmlns="http://www.w3.org/2000/svg" width="1860" height="330" viewBox="0 0 1860 330" role="img" aria-label="Hydra build #{{ id }} banner">
 <style>
-text { font-family: Helvetica, Arial, sans-serif; fill: #222; }
-.muted { fill: #777; }
-.label { font-size: 22px; font-weight: 700; }
-.value { font-size: 22px; }
-.mono { font-family: "DejaVu Sans Mono", "SFMono-Regular", Consolas, monospace; font-size: 18px; }
+text {
+  font-family: Helvetica, Arial, sans-serif;
+  fill: #f5f7fa;
+  stroke: rgba(17, 24, 39, 0.9);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+}
+.muted {
+  fill: #d5dbe3;
+  stroke: rgba(17, 24, 39, 0.85);
+}
+.label { font-size: 26px; font-weight: 700; }
+.value { font-size: 27px; }
+.meta-label { font-size: 34px; font-weight: 700; }
+.meta-value { font-size: 36px; }
+.mono { font-family: "DejaVu Sans Mono", "SFMono-Regular", Consolas, monospace; font-size: 21px; }
+.credit { font-size: 22px; }
 .headline { font-size: 38px; font-weight: 700; }
-.build-id { font-size: 24px; font-weight: 700; }
+.build-id { font-size: 30px; font-weight: 700; }
+.frame {
+  fill: none;
+  stroke: rgba(245, 247, 250, 0.92);
+  stroke-width: 2px;
+}
+.frame-shadow {
+  fill: none;
+  stroke: rgba(17, 24, 39, 0.75);
+  stroke-width: 6px;
+}
+.separator {
+  stroke: rgba(245, 247, 250, 0.6);
+  stroke-width: 2px;
+}
+.separator-shadow {
+  stroke: rgba(17, 24, 39, 0.55);
+  stroke-width: 5px;
+}
 </style>
-<rect width="1800" height="300" fill="#f5f5f5"/>
-<rect x="10" y="10" width="1780" height="280" rx="10" fill="#fff" stroke="#d9d9d9"/>
-<line x1="1088" y1="44" x2="1088" y2="256" stroke="#e1e1e1"/>
-<line x1="1422" y1="44" x2="1422" y2="256" stroke="#e1e1e1"/>
-<g transform="translate(34,72)">
+<rect x="10" y="10" width="1840" height="310" rx="10" class="frame-shadow"/>
+<rect x="10" y="10" width="1840" height="310" rx="10" class="frame"/>
+<line x1="1216" y1="44" x2="1216" y2="286" class="separator-shadow"/>
+<line x1="1216" y1="44" x2="1216" y2="286" class="separator"/>
+<line x1="1600" y1="44" x2="1600" y2="286" class="separator-shadow"/>
+<line x1="1600" y1="44" x2="1600" y2="286" class="separator"/>
+<g transform="translate(34,82)">
   {{ icon|safe }}
-  <text x="66" y="172" text-anchor="middle" class="build-id">#{{ id }}</text>
+  <text x="76" y="212" text-anchor="middle" class="build-id">#{{ id }}</text>
 </g>
-<g transform="translate(196,54)">
+<g transform="translate(214,58)">
   <text x="0" y="0" style="font-size:{{ headline_size }}px;font-weight:700">{{ job }}</text>
-  <text x="0" y="42" style="font-size:30px;font-weight:700;fill:{{ color }}">{{ status_label }}</text>
-  <text x="0" y="92" class="label muted">Project / Jobset</text>
-  <text x="0" y="122" class="value">{{ project }} / {{ jobset }}</text>
-  <text x="360" y="92" class="label muted">System</text>
-  <text x="360" y="122" class="value">{{ system }}</text>
-  <text x="590" y="92" class="label muted">Evaluation</text>
-  <text x="590" y="122" class="value">{{ evaluation }}</text>
-  <text x="770" y="92" class="label muted">Priority</text>
-  <text x="770" y="122" class="value">{{ priority }}</text>
-  <text x="0" y="168" class="label muted">Nix Name</text>
-  <text x="0" y="196" class="mono">{{ nix_name }}</text>
+  <text x="0" y="46" style="font-size:36px;font-weight:700;fill:{{ color }}">{{ status_label }}</text>
+  <text x="0" y="104" class="meta-label muted">Project / Jobset</text>
+  <text x="0" y="148" class="meta-value">{{ project }} / {{ jobset }}</text>
+  <text x="400" y="104" class="meta-label muted">System</text>
+  <text x="400" y="148" class="meta-value">{{ system }}</text>
+  <text x="680" y="104" class="meta-label muted">Evaluation</text>
+  <text x="680" y="148" class="meta-value">{{ evaluation }}</text>
+  <text x="0" y="190" class="label muted">Hydra Banner Info</text>
+  <text x="0" y="228" class="mono">Generated with hydra-banner.harinn.dev @ {{ generated_at }}</text>
 </g>
-<g transform="translate(1118,58)">
-  <text x="0" y="0" class="label muted">Started</text>
-  <text x="0" y="30" class="value">{{ started }}</text>
-  <text x="0" y="78" class="label muted">Finished</text>
-  <text x="0" y="108" class="value">{{ finished }}</text>
-  <text x="0" y="156" class="label muted">Duration</text>
-  <text x="0" y="186" class="value">{{ duration }}</text>
-</g>
-<g transform="translate(1450,58)">
+<g transform="translate(1246,64)">
   <text x="0" y="0" class="label muted">Queued At</text>
-  <text x="0" y="30" class="value">{{ queued_at }}</text>
-  <text x="0" y="78" class="label muted">Product</text>
-  <text x="0" y="108" class="value">{{ product }}</text>
-  <text x="0" y="156" class="label muted">Size</text>
-  <text x="0" y="186" class="value">{{ size }}</text>
+  <text x="0" y="34" class="value">{{ queued_at }}</text>
+  <text x="0" y="90" class="label muted">Started</text>
+  <text x="0" y="124" class="value">{{ started }}</text>
+  <text x="0" y="180" class="label muted">Finished</text>
+  <text x="0" y="214" class="value">{{ finished }}</text>
+</g>
+<g transform="translate(1628,64)">
+  <text x="0" y="0" class="label muted">Duration</text>
+  <text x="0" y="34" class="value">{{ duration }}</text>
+  <text x="0" y="90" class="label muted">Product</text>
+  <text x="0" y="124" class="value">{{ product }}</text>
+  <text x="0" y="180" class="label muted">Size</text>
+  <text x="0" y="214" class="value">{{ size }}</text>
 </g>
 </svg>
