@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="300" viewBox="0 0 1800 300" role="img" aria-label="Hydra build #{{ id }} banner">
+<style>
+text { font-family: Helvetica, Arial, sans-serif; fill: #222; }
+.muted { fill: #777; }
+.label { font-size: 22px; font-weight: 700; }
+.value { font-size: 22px; }
+.mono { font-family: "DejaVu Sans Mono", "SFMono-Regular", Consolas, monospace; font-size: 18px; }
+.headline { font-size: 38px; font-weight: 700; }
+.build-id { font-size: 24px; font-weight: 700; }
+</style>
+<rect width="1800" height="300" fill="#f5f5f5"/>
+<rect x="10" y="10" width="1780" height="280" rx="10" fill="#fff" stroke="#d9d9d9"/>
+<line x1="1088" y1="44" x2="1088" y2="256" stroke="#e1e1e1"/>
+<line x1="1422" y1="44" x2="1422" y2="256" stroke="#e1e1e1"/>
+<g transform="translate(34,72)">
+  {{ icon|safe }}
+  <text x="66" y="172" text-anchor="middle" class="build-id">#{{ id }}</text>
+</g>
+<g transform="translate(196,54)">
+  <text x="0" y="0" style="font-size:{{ headline_size }}px;font-weight:700">{{ job }}</text>
+  <text x="0" y="42" style="font-size:30px;font-weight:700;fill:{{ color }}">{{ status_label }}</text>
+  <text x="0" y="92" class="label muted">Project / Jobset</text>
+  <text x="0" y="122" class="value">{{ project }} / {{ jobset }}</text>
+  <text x="360" y="92" class="label muted">System</text>
+  <text x="360" y="122" class="value">{{ system }}</text>
+  <text x="590" y="92" class="label muted">Evaluation</text>
+  <text x="590" y="122" class="value">{{ evaluation }}</text>
+  <text x="770" y="92" class="label muted">Priority</text>
+  <text x="770" y="122" class="value">{{ priority }}</text>
+  <text x="0" y="168" class="label muted">Nix Name</text>
+  <text x="0" y="196" class="mono">{{ nix_name }}</text>
+</g>
+<g transform="translate(1118,58)">
+  <text x="0" y="0" class="label muted">Started</text>
+  <text x="0" y="30" class="value">{{ started }}</text>
+  <text x="0" y="78" class="label muted">Finished</text>
+  <text x="0" y="108" class="value">{{ finished }}</text>
+  <text x="0" y="156" class="label muted">Duration</text>
+  <text x="0" y="186" class="value">{{ duration }}</text>
+</g>
+<g transform="translate(1450,58)">
+  <text x="0" y="0" class="label muted">Queued At</text>
+  <text x="0" y="30" class="value">{{ queued_at }}</text>
+  <text x="0" y="78" class="label muted">Product</text>
+  <text x="0" y="108" class="value">{{ product }}</text>
+  <text x="0" y="156" class="label muted">Size</text>
+  <text x="0" y="186" class="value">{{ size }}</text>
+</g>
+</svg>
