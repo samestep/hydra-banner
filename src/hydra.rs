@@ -1,6 +1,3 @@
-use std::collections::HashMap;
-
-use axum::http::header;
 use reqwest::Client;
 use serde::Deserialize;
 
@@ -41,23 +38,7 @@ pub struct HydraBuild {
     #[serde(default)]
     pub stoptime: Option<i64>,
     #[serde(default)]
-    pub nixname: Option<String>,
-    #[serde(default)]
-    pub priority: Option<i64>,
-    #[serde(default)]
     pub jobsetevals: Option<Vec<u64>>,
-    #[serde(default)]
-    pub buildproducts: Option<HashMap<String, BuildProduct>>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct BuildProduct {
-    #[serde(rename = "type", default)]
-    pub kind: String,
-    #[serde(default)]
-    pub subtype: Option<String>,
-    #[serde(default)]
-    pub filesize: Option<u64>,
 }
 
 pub async fn fetch_build(client: &Client, id: u64) -> Result<HydraBuild, HydraError> {
@@ -70,8 +51,7 @@ pub async fn fetch_build(client: &Client, id: u64) -> Result<HydraBuild, HydraEr
     let url = format!("https://hydra.nixos.org/build/{id}");
     let response = client
         .get(url)
-        .header(header::ACCEPT, "application/json")
-        .header(header::USER_AGENT, HYDRA_USER_AGENT)
+        .header(reqwest::header::ACCEPT, "application/json")
         .send()
         .await
         .map_err(|err| HydraError::Other(format!("request to Hydra failed: {err}")))?;
