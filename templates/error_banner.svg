@@ -1,1 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="60" viewBox="0 0 400 60" role="img" aria-label="Hydra banner error"><text x="12" y="36" font-family="Helvetica, Arial, sans-serif" font-size="20" fill="#ff8a80" stroke="rgba(127, 29, 29, 0.95)" stroke-width="2.5" paint-order="stroke fill" stroke-linejoin="round">Error: {{ message }}</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1860" height="330" viewBox="0 0 1860 330" role="img" aria-label="Hydra banner error">
+<style>
+text {
+  font-family: Helvetica, Arial, sans-serif;
+  fill: #f5f7fa;
+  stroke: rgba(17, 24, 39, 0.9);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+}
+.muted {
+  fill: #f1b7b3;
+  stroke: rgba(69, 10, 10, 0.9);
+}
+.title { font-size: 68px; font-weight: 700; }
+.headline { font-size: 52px; font-weight: 700; }
+.subline { font-size: 38px; }
+.frame {
+  fill: none;
+  stroke: rgba(245, 247, 250, 0.92);
+  stroke-width: 2px;
+}
+.frame-shadow {
+  fill: none;
+  stroke: rgba(17, 24, 39, 0.75);
+  stroke-width: 6px;
+}
+</style>
+<rect x="10" y="10" width="1840" height="310" rx="10" class="frame-shadow"/>
+<rect x="10" y="10" width="1840" height="310" rx="10" class="frame"/>
+<g id="left-rail" transform="translate(56,68)">
+  <g transform="translate(-10,-10) scale(8.2)">
+    <path d="M0 0h24v24H0z" fill="none" stroke="none"/>
+    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" fill="none" stroke="#ff8a80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 9v4" fill="none" stroke="#ff8a80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 16v.01" fill="none" stroke="#ff8a80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</g>
+<g id="main-content" transform="translate(279,178)">
+  <text x="0" y="-62" class="title muted">Hydra-Banner Error:</text>
+  <text x="0" y="10" class="headline">{{ line1 }}</text>
+  <text x="0" y="82" class="subline">{{ line2 }}</text>
+</g>
+</svg>
