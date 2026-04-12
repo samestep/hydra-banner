@@ -5,7 +5,7 @@ use askama::Template;
 
 use crate::{
     format::{format_duration, format_size, format_timestamp},
-    hydra::{BuildProduct, HydraBuild},
+    hydra::{BuildProduct, HydraBuild, HydraError},
     status::{icon_svg, status_info},
 };
 
@@ -36,7 +36,8 @@ pub struct BannerTemplate {
 #[derive(Template)]
 #[template(path = "error_banner.svg", escape = "html")]
 pub struct ErrorBannerTemplate {
-    pub message: String,
+    pub line1: String,
+    pub line2: String,
 }
 
 pub fn render_svg(build: &HydraBuild) -> BannerTemplate {
@@ -99,9 +100,28 @@ pub fn render_svg(build: &HydraBuild) -> BannerTemplate {
     }
 }
 
-pub fn render_error_svg(message: &str) -> ErrorBannerTemplate {
-    ErrorBannerTemplate {
-        message: message.to_string(),
+fn truncate(s: &str, max_chars: usize) -> String {
+    if s.chars().count() <= max_chars {
+        s.to_string()
+    } else {
+        s.chars().take(max_chars).collect::<String>() + "…"
+    }
+}
+
+pub fn render_error_svg(err: &HydraError) -> ErrorBannerTemplate {
+    match err {
+        HydraError::NotFound(id) => ErrorBannerTemplate {
+            line1: format!("Build #{id} does not exist. "),
+            line2: format!("Visit https://hydra.nixos.org/build/{id} to confirm."),
+        },
+        HydraError::InvalidId(raw) => ErrorBannerTemplate {
+            line1: format!("Invalid build ID: {:?}", truncate(raw, 24)),
+            line2: "Build IDs must be positive i32 integers".to_string(),
+        },
+        HydraError::Other(msg) => ErrorBannerTemplate {
+            line1: truncate(msg, 48),
+            line2: "Visit https://hydra.nixos.org for more information.".to_string(),
+        },
     }
 }
 
