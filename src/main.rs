@@ -11,6 +11,8 @@ mod hydra;
 mod render;
 mod status;
 
+use crate::hydra::HYDRA_USER_AGENT;
+
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub client: Client,
@@ -47,7 +49,7 @@ async fn main() {
         .init();
 
     let client = Client::builder()
-        .user_agent("hydra-banner/0.1.0")
+        .user_agent(HYDRA_USER_AGENT)
         .timeout(std::time::Duration::from_secs(30))
         .build()
         .expect("reqwest client should initialize");

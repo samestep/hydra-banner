@@ -4,6 +4,14 @@ use axum::http::header;
 use reqwest::Client;
 use serde::Deserialize;
 
+// Please set a proper User-Agent when scraping hydra.nixos.org, so we can reach out to you, when you are overloading the machine! --Hexa
+pub const HYDRA_USER_AGENT: &str = concat!(
+    env!("CARGO_PKG_NAME"),
+    "/",
+    env!("CARGO_PKG_VERSION"),
+    " (+https://github.com/MiniHarinn/hydra-banner)"
+);
+
 #[derive(Debug)]
 pub enum HydraError {
     NotFound(u64),
@@ -63,6 +71,7 @@ pub async fn fetch_build(client: &Client, id: u64) -> Result<HydraBuild, HydraEr
     let response = client
         .get(url)
         .header(header::ACCEPT, "application/json")
+        .header(header::USER_AGENT, HYDRA_USER_AGENT)
         .send()
         .await
         .map_err(|err| HydraError::Other(format!("request to Hydra failed: {err}")))?;
