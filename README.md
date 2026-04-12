@@ -28,11 +28,9 @@ Embed in a PR or issue:
 nix run github:MiniHarinn/hydra-banner#getmd -- <build-id|url> [build-id|url]...
 ```
 
-Examples:
+Example:
 
 ```bash
-nix run github:MiniHarinn/hydra-banner#getmd -- <build-id>
-nix run github:MiniHarinn/hydra-banner#getmd -- https://hydra.nixos.org/build/<build-id>
 nix run github:MiniHarinn/hydra-banner#getmd -- <build-id-1> <build-id-2> <build-id-3>
 ```
 
@@ -46,11 +44,9 @@ Output (ready to paste into a PR or issue):
 
 ## Example Output
 
-![](https://hydra-banner.harinn.dev/build/325973022)
-
-![](https://hydra-banner.harinn.dev/build/326196302)
-
-![](https://hydra-banner.harinn.dev/build/324307594)
+[![](https://hydra-banner.harinn.dev/build/325973022)](https://hydra.nixos.org/build/325973022)
+[![](https://hydra-banner.harinn.dev/build/326196302)](https://hydra.nixos.org/build/326196302)
+[![](https://hydra-banner.harinn.dev/build/324307594)](https://hydra.nixos.org/build/324307594)
 
 ## Related Projects
 - https://github.com/NixOS/hydra
