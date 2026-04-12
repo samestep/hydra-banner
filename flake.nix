@@ -10,74 +10,69 @@
   outputs = { self, nixpkgs, rust-overlay }:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
-      getmd = system:
-        let pkgs = import nixpkgs { inherit system; };
-        in pkgs.stdenvNoCC.mkDerivation {
-          name = "getmd";
-          src = ./scripts/getmd;
-          dontUnpack = true;
-          installPhase = "install -D $src $out/bin/getmd";
-        };
-      glb = system:
-        let pkgs = import nixpkgs { inherit system; };
-        in pkgs.writeShellApplication {
-          name = "glb";
-          runtimeInputs = [ pkgs.hydra-check pkgs.jq ];
-          text = builtins.readFile ./scripts/glb;
-        };
+      forAllSystems = f: nixpkgs.lib.genAttrs systems f;
     in {
       packages = forAllSystems (system:
         let
-          pkgs = import nixpkgs { inherit system; overlays = [ rust-overlay.overlays.default ]; };
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ rust-overlay.overlays.default ];
+          };
           toolchain = pkgs.rust-bin.stable.latest.default;
           rustPlatform = pkgs.makeRustPlatform { cargo = toolchain; rustc = toolchain; };
-          rustPackage = rustPlatform.buildRustPackage {
+        in {
+          default = rustPlatform.buildRustPackage {
             pname = "hydra-banner";
             version = "0";
             src = ./.;
             cargoLock.lockFile = ./Cargo.lock;
           };
-        in {
-          default = rustPackage;
-          getmd = getmd system;
-          glb = glb system;
+          getmd = pkgs.stdenvNoCC.mkDerivation {
+            name = "getmd";
+            src = ./scripts/getmd;
+            dontUnpack = true;
+            installPhase = "install -D $src $out/bin/getmd";
+          };
+          glb = pkgs.writeShellApplication {
+            name = "glb";
+            runtimeInputs = [ pkgs.hydra-check pkgs.jq ];
+            text = builtins.readFile ./scripts/glb;
+          };
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/miniharinn/hydra-banner";
             tag = "latest";
-            copyToRoot = [ rustPackage ];
+            copyToRoot = [ self.packages.${system}.default ];
             config = {
-              Cmd = [ "${rustPackage}/bin/hydra-banner" ];
+              Cmd = [ "${self.packages.${system}.default}/bin/hydra-banner" ];
               Env = [ "PORT=3000" ];
-              ExposedPorts = {
-                "3000/tcp" = { };
-              };
+              ExposedPorts."3000/tcp" = { };
             };
           };
         }
       );
 
-      apps = forAllSystems (system: {
-        getmd = { type = "app"; program = "${getmd system}/bin/getmd"; };
-        glb = { type = "app"; program = "${glb system}/bin/glb"; };
-      });
+      apps = forAllSystems (system:
+        let pkg = name: { type = "app"; program = "${self.packages.${system}.${name}}/bin/${name}"; };
+        in {
+          getmd = pkg "getmd";
+          glb = pkg "glb";
+        }
+      );
 
       devShells = forAllSystems (system:
         let
-          pkgs = import nixpkgs { inherit system; overlays = [ rust-overlay.overlays.default ]; };
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ rust-overlay.overlays.default ];
+          };
           toolchain = pkgs.rust-bin.stable.latest.default.override {
             extensions = [ "rust-src" "rust-analyzer" "clippy" "rustfmt" ];
           };
         in {
           default = pkgs.mkShell {
-            nativeBuildInputs = [
-              toolchain
-              pkgs.watchexec
-            ];
+            nativeBuildInputs = [ toolchain pkgs.watchexec ];
             RUST_LOG = "hydra_banner=debug,tower_http=debug";
-            shellHook = ''
-              echo "dev server: ./scripts/dev"
-            '';
+            shellHook = ''echo "dev server: ./scripts/dev"'';
           };
         }
       );
