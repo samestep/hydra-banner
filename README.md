@@ -25,13 +25,13 @@ Embed in a PR or issue:
 ### Generate markdown for Hydra build(s):
 
 ```bash
-nix run github:MiniHarinn/hydra-banner#getmd -- <build-id|url> [build-id|url]...
+nix run github:MiniHarinn/hydra-banner#getmd <build-id|url> [build-id|url]...
 ```
 
 Example:
 
 ```bash
-nix run github:MiniHarinn/hydra-banner#getmd -- <build-id-1> <build-id-2> <build-id-3>
+nix run github:MiniHarinn/hydra-banner#getmd <build-id-1> <build-id-2> <build-id-3>
 ```
 
 Output (ready to paste into a PR or issue):
