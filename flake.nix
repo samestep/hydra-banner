@@ -19,6 +19,13 @@
           dontUnpack = true;
           installPhase = "install -D $src $out/bin/getmd";
         };
+      glb = system:
+        let pkgs = import nixpkgs { inherit system; };
+        in pkgs.writeShellApplication {
+          name = "glb";
+          runtimeInputs = [ pkgs.hydra-check pkgs.jq ];
+          text = builtins.readFile ./scripts/glb;
+        };
     in {
       packages = forAllSystems (system:
         let
@@ -34,6 +41,7 @@
         in {
           default = rustPackage;
           getmd = getmd system;
+          glb = glb system;
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/miniharinn/hydra-banner";
             tag = "latest";
@@ -51,6 +59,7 @@
 
       apps = forAllSystems (system: {
         getmd = { type = "app"; program = "${getmd system}/bin/getmd"; };
+        glb = { type = "app"; program = "${glb system}/bin/glb"; };
       });
 
       devShells = forAllSystems (system:

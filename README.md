@@ -42,6 +42,27 @@ Output (ready to paste into a PR or issue):
 [![](https://hydra-banner.harinn.dev/build/<build-id-3>)](https://hydra.nixos.org/build/<build-id-3>)
 ```
 
+### Grab latest build (glb):
+
+Don't have a build ID? `glb` (grab-latest-build) looks up the latest Hydra build for a nixpkgs attribute and generates the markdown directly.
+
+```bash
+nix run github:MiniHarinn/hydra-banner#glb <attr> [attr]...
+```
+
+Example:
+
+```bash
+nix run github:MiniHarinn/hydra-banner#glb hello ripgrep
+```
+
+Output (ready to paste into a PR or issue):
+
+```text
+[![](https://hydra-banner.harinn.dev/build/<build-id-1>)](https://hydra.nixos.org/build/<build-id-1>)
+[![](https://hydra-banner.harinn.dev/build/<build-id-2>)](https://hydra.nixos.org/build/<build-id-2>)
+```
+
 ## Example Output
 
 [![](https://hydra-banner.harinn.dev/build/325973022)](https://hydra.nixos.org/build/325973022)

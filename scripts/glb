@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: glb <attr> [attr]..." >&2
+  exit 1
+fi
+
+for ATTR in "$@"; do
+  JSON=$(hydra-check --json "$ATTR")
+  BUILD_ID=$(printf '%s' "$JSON" | jq -r 'to_entries[0].value[0].build_id // empty')
+
+  if [[ -z "$BUILD_ID" ]]; then
+    echo "glb: no build found for '$ATTR'" >&2
+    exit 1
+  fi
+
+  echo "[![](https://hydra-banner.harinn.dev/build/${BUILD_ID})](https://hydra.nixos.org/build/${BUILD_ID})"
+done
