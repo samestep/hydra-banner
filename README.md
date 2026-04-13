@@ -76,3 +76,7 @@ Output (ready to paste into a PR or issue):
 ## Contributions
 
 Issues and PRs are welcome. I just want to make the workflow around Hydra better for everyone in Nixpkgs!
+
+---
+
+<p align="center">Made with ❤️ by <a href="https://github.com/MiniHarinn">@MiniHarinn</a> and his passion in Nix</p>
