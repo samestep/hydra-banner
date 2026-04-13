@@ -41,11 +41,19 @@ pub async fn build_banner(State(state): State<Arc<AppState>>, Path(raw): Path<St
     };
 
     match fetch_build(&state.client, id).await {
-        Ok(build) => (
-            [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],
-            render_svg(&build),
-        )
-            .into_response(),
+        Ok(build) => {
+            let status = if build.finished == 0 {
+                StatusCode::ACCEPTED
+            } else {
+                StatusCode::OK
+            };
+            (
+                status,
+                [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],
+                render_svg(&build),
+            )
+                .into_response()
+        }
         Err(err) => {
             error!("failed to fetch build {}: {:?}", id, err);
             let status = match &err {
