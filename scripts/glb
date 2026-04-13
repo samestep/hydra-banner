@@ -7,7 +7,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 for ATTR in "$@"; do
-  JSON=$(hydra-check --json "$ATTR") || true
+  JSON=$(hydra-check --json "$ATTR" --jobset "nixpkgs/unstable") || true
   BUILD_ID=$(printf '%s' "$JSON" | jq -r 'to_entries[0].value[0].build_id // empty')
 
   if [[ -z "$BUILD_ID" ]]; then
