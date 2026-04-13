@@ -12,7 +12,7 @@ The hosted instance ([hydra-banner.harinn.dev](https://hydra-banner.harinn.dev))
 - 4 hours for **unfinished** builds (HTTP 202)
 - 2 hours for Hydra 50x errors (HTTP 502)
 
-Hydra maintainers — if this service is overloading Hydra (User-Agent: `hydra-banner/<version> (+https://github.com/MiniHarinn/hydra-banner)`) please reach out to me at `matrix:@harinn:matrix.org`
+Hydra maintainers -- if this service is overloading Hydra (User-Agent: `hydra-banner/<version> (+https://github.com/MiniHarinn/hydra-banner)`) please reach out to me at `matrix:@harinn:matrix.org`
 
 ## Usage
 
