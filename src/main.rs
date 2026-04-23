@@ -1,4 +1,4 @@
-use std::{env, net::SocketAddr, sync::Arc};
+use std::{env, net::SocketAddr};
 
 use axum::{routing::get, Router};
 use reqwest::Client;
@@ -54,7 +54,7 @@ async fn main() {
         .build()
         .expect("reqwest client should initialize");
 
-    let state = Arc::new(AppState { client });
+    let state = AppState { client };
     let app = Router::new()
         .route("/", get(handlers::home))
         .route("/health", get(handlers::health))

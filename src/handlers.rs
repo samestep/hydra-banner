@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use axum::{
     extract::{Path, State},
     http::{header, StatusCode},
@@ -9,7 +7,7 @@ use tracing::error;
 
 use crate::{
     hydra::{fetch_build, HydraError},
-    render::{render_error_svg, render_svg, ErrorBannerTemplate},
+    render::{render_error_svg, render_svg},
     AppState,
 };
 
@@ -21,22 +19,22 @@ pub async fn home() -> Redirect {
     Redirect::permanent("https://github.com/MiniHarinn/hydra-banner")
 }
 
-pub async fn build_banner(State(state): State<Arc<AppState>>, Path(raw): Path<String>) -> Response {
-    let svg_response = |status: StatusCode, svg: ErrorBannerTemplate| {
-        (
-            status,
-            [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],
-            svg,
-        )
-            .into_response()
-    };
+fn svg(status: StatusCode, body: impl IntoResponse) -> Response {
+    (
+        status,
+        [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],
+        body,
+    )
+        .into_response()
+}
 
+pub async fn build_banner(State(state): State<AppState>, Path(raw): Path<String>) -> Response {
     let id = match raw.parse::<u64>() {
         Ok(id) => id,
         Err(_) => {
             let err = HydraError::InvalidId(raw.clone());
             error!("invalid build ID: {:?}", raw);
-            return svg_response(StatusCode::BAD_REQUEST, render_error_svg(&err));
+            return svg(StatusCode::BAD_REQUEST, render_error_svg(&err));
         }
     };
 
@@ -47,12 +45,7 @@ pub async fn build_banner(State(state): State<Arc<AppState>>, Path(raw): Path<St
             } else {
                 StatusCode::OK
             };
-            (
-                status,
-                [(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")],
-                render_svg(&build),
-            )
-                .into_response()
+            svg(status, render_svg(&build))
         }
         Err(err) => {
             error!("failed to fetch build {}: {:?}", id, err);
@@ -61,7 +54,7 @@ pub async fn build_banner(State(state): State<Arc<AppState>>, Path(raw): Path<St
                 HydraError::InvalidId(_) => StatusCode::BAD_REQUEST,
                 HydraError::Other(_) => StatusCode::BAD_GATEWAY,
             };
-            svg_response(status, render_error_svg(&err))
+            svg(status, render_error_svg(&err))
         }
     }
 }

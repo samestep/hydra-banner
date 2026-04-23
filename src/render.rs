@@ -8,6 +8,12 @@ use crate::{
     status::{icon_svg, status_info},
 };
 
+const DASH: &str = "—";
+
+fn ts_or_dash(ts: Option<i64>) -> String {
+    ts.map(format_timestamp).unwrap_or_else(|| DASH.into())
+}
+
 #[derive(Template)]
 #[template(path = "banner.svg", escape = "html")]
 pub struct BannerTemplate {
@@ -40,36 +46,27 @@ pub fn render_svg(build: &HydraBuild) -> BannerTemplate {
         .jobsetevals
         .as_ref()
         .and_then(|evals| evals.first().copied())
-        .map(|eval| eval.to_string())
-        .unwrap_or_else(|| "—".to_string());
-    let started = build
-        .starttime
-        .map(format_timestamp)
-        .unwrap_or_else(|| "—".to_string());
-    let finished = build
-        .stoptime
-        .map(format_timestamp)
-        .unwrap_or_else(|| "—".to_string());
-    let queued_at = format_timestamp(build.timestamp);
-    let generated_at = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .ok()
-        .map(|duration| format_timestamp(duration.as_secs() as i64))
-        .unwrap_or_else(|| "—".to_string());
+        .map_or_else(|| DASH.into(), |eval| eval.to_string());
+    let generated_at = ts_or_dash(
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .ok()
+            .map(|duration| duration.as_secs() as i64),
+    );
     BannerTemplate {
         id: build.id,
         job: build.job.clone(),
         color: status.color,
         status_label: status.label,
-        icon: icon_svg(status.icon_variant),
+        icon: icon_svg(status.icon),
         headline_size: headline_font_size(&build.job),
         project: build.project.clone(),
         jobset: build.jobset.clone(),
         system: build.system.clone(),
         evaluation,
-        started,
-        finished,
-        queued_at,
+        started: ts_or_dash(build.starttime),
+        finished: ts_or_dash(build.stoptime),
+        queued_at: format_timestamp(build.timestamp),
         generated_at,
     }
 }
